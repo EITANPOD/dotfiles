@@ -1,0 +1,15 @@
+# ┌───────────────────────────────────────────────────────────────────────────┐
+# │                         Local ZSH Configuration                            │
+# │  Copy this file to ~/.zshrc.local and add your secrets/local settings     │
+# └───────────────────────────────────────────────────────────────────────────┘
+
+# API Keys (DO NOT commit these to version control!)
+# export ANTHROPIC_API_KEY="your-api-key-here"
+# export OPENAI_API_KEY="your-api-key-here"
+# export GITHUB_TOKEN="your-token-here"
+
+# Machine-specific PATH additions
+# export PATH="/custom/path:$PATH"
+
+# Work-specific aliases or configurations
+# alias work-vpn='...'

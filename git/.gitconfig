@@ -1,0 +1,43 @@
+[user]
+	name = eitanpod
+	email = eitan@octopuscs.com
+
+[init]
+	defaultBranch = main
+
+[core]
+	editor = nvim
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	side-by-side = true
+	line-numbers = true
+
+[merge]
+	conflictstyle = diff3
+
+[diff]
+	colorMoved = default
+
+[pull]
+	rebase = true
+
+[push]
+	autoSetupRemote = true
+
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	visual = !gitk
+	lg = log --oneline --graph --decorate
+
+[url "https://gitlab.octopuscs.com/"]
+	insteadOf = git@gitlab.octopuscs.com:

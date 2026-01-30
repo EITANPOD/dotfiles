@@ -1,0 +1,33 @@
+# Secrets and local configs
+*.local
+.zshrc.local
+.env
+.env.*
+!.env.example
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Neovim
+nvim/.config/nvim/lazy-lock.json
+nvim/.config/nvim/.neoconf.json
+nvim/.config/nvim/lazyvim.json
+
+# Backup files
+*.bak
+*.backup
+
+# Editor directories
+.idea/
+.vscode/
+
+# Temp files
+*.tmp
+*.temp

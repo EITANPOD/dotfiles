@@ -1,0 +1,16 @@
+# ┌───────────────────────────────────────────────────────────────────────────┐
+# │                           Ghostty Configuration                            │
+# └───────────────────────────────────────────────────────────────────────────┘
+
+# Theme
+theme = Catppuccin Mocha
+
+# Font
+font-family = JetBrains Mono NL Regular
+font-size = 16
+
+# Behavior
+mouse-hide-while-typing = true
+
+# Visual effects
+background-blur-radius = 20

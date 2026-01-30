@@ -1,0 +1,176 @@
+# ┌───────────────────────────────────────────────────────────────────────────┐
+# │                           Starship Prompt Config                           │
+# └───────────────────────────────────────────────────────────────────────────┘
+
+# Catppuccin Mocha palette
+palette = "catppuccin_mocha"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Layout
+# ─────────────────────────────────────────────────────────────────────────────
+
+format = """
+$directory\
+$git_branch\
+${custom.git_dirty}\
+$git_status\
+$character"""
+
+right_format = """
+$cmd_duration\
+$python\
+$nodejs\
+$golang\
+$rust\
+$java\
+$php\
+$terraform\
+$kubernetes"""
+
+add_newline = false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Prompt Character
+# ─────────────────────────────────────────────────────────────────────────────
+
+[character]
+success_symbol = "[❯](green)"
+error_symbol = "[❯](red)"
+vimcmd_symbol = "[❮](subtext1)"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Directory
+# ─────────────────────────────────────────────────────────────────────────────
+
+[directory]
+truncation_length = 1
+truncate_to_repo = false
+style = "bold sapphire"
+read_only = " 󰌾"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Git
+# ─────────────────────────────────────────────────────────────────────────────
+
+[git_branch]
+symbol = " "
+style = "bold red"
+
+[git_status]
+style = "bold red"
+format = '([$ahead_behind]($style) )'
+ahead = "⇡"
+behind = "⇣"
+diverged = "⇕"
+conflicted = "x"
+up_to_date = ""
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Kubernetes
+# ─────────────────────────────────────────────────────────────────────────────
+
+[kubernetes]
+disabled = false
+symbol = "⎈ "
+style = "#326CE5"
+format = '[$symbol]($style)[$context](bold #326CE5)[/](overlay0)[$namespace](bold #E6DEFF) '
+
+[[kubernetes.contexts]]
+context_pattern = ".*/(?P<cluster>[\\w-]+)$"
+context_alias = "$cluster"
+
+[[kubernetes.contexts]]
+context_pattern = ".*_(?P<cluster>[\\w-]+)$"
+context_alias = "$cluster"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Infrastructure Tools
+# ─────────────────────────────────────────────────────────────────────────────
+
+[terraform]
+symbol = "󱁢 "
+style = "lavender"
+format = '[$symbol$workspace]($style) '
+
+[cmd_duration]
+min_time = 2000
+style = "yellow"
+format = '[$duration]($style) '
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Languages
+# ─────────────────────────────────────────────────────────────────────────────
+
+[python]
+symbol = " "
+style = "teal"
+format = '[$symbol($version )(\($virtualenv\) )]($style)'
+
+[nodejs]
+symbol = " "
+style = "green"
+format = '[$symbol($version )]($style)'
+
+[golang]
+symbol = " "
+style = "sapphire"
+format = '[$symbol($version )]($style)'
+
+[rust]
+symbol = " "
+style = "maroon"
+format = '[$symbol($version )]($style)'
+
+[java]
+symbol = " "
+style = "peach"
+format = '[$symbol($version )]($style)'
+
+[php]
+symbol = " "
+style = "blue"
+format = '[$symbol($version )]($style)'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Custom Modules
+# ─────────────────────────────────────────────────────────────────────────────
+
+[custom.git_dirty]
+description = "Show a single X if there are any changes"
+when = "git status --porcelain | grep -q ."
+shell = ["sh"]
+symbol = "✘ "
+style = "bold red"
+format = '[$symbol]($style)'
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Catppuccin Mocha Palette
+# ─────────────────────────────────────────────────────────────────────────────
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"
