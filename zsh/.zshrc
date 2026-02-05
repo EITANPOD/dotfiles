@@ -1,5 +1,5 @@
 # ┌───────────────────────────────────────────────────────────────────────────┐
-# │                              Eitan's ZSH Config                            │
+# │                              Eitan's ZSH Config                           │
 # └───────────────────────────────────────────────────────────────────────────┘
 
 # Fastfetch on terminal start
@@ -44,6 +44,7 @@ alias sshn='ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 # Aliases: Git
 # ─────────────────────────────────────────────────────────────────────────────
 alias ga="git add"
+alias gch="git checkout"
 alias gc="git commit -m"
 alias gca="git commit -a -m"
 alias gp="git push"
