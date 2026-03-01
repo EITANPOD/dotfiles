@@ -109,3 +109,6 @@ export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 # This file is gitignored - use it for API keys and local overrides
 # ─────────────────────────────────────────────────────────────────────────────
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# OpenClaw Completion
+source "/Users/eitanpod/.openclaw/completions/openclaw.zsh"
