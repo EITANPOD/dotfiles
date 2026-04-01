@@ -28,6 +28,9 @@ nvim/.config/nvim/lazyvim.json
 .idea/
 .vscode/
 
+# Tmux plugins (managed by TPM)
+tmux/.config/tmux/plugins/
+
 # Temp files
 *.tmp
 *.temp
