@@ -2,8 +2,16 @@
 # │                              Eitan's ZSH Config                           │
 # └───────────────────────────────────────────────────────────────────────────┘
 
+# ─────────────────────────────────────────────────────────────────────────────
+# OS Detection
+# ─────────────────────────────────────────────────────────────────────────────
+case "$(uname -s)" in
+    Darwin) _OS="macos" ;;
+    Linux)  _OS="linux" ;;
+esac
+
 # Fastfetch on terminal start
-fastfetch
+command -v fastfetch &>/dev/null && fastfetch
 
 # ─────────────────────────────────────────────────────────────────────────────
 # History Configuration
@@ -18,7 +26,7 @@ setopt hist_ignore_dups
 # ─────────────────────────────────────────────────────────────────────────────
 # Completions
 # ─────────────────────────────────────────────────────────────────────────────
-fpath=(/Users/eitanpod/.docker/completions $fpath)
+[[ -d "$HOME/.docker/completions" ]] && fpath=("$HOME/.docker/completions" $fpath)
 autoload -Uz compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
 zstyle ':completion:*' menu select
@@ -27,13 +35,20 @@ zstyle ':completion:*' menu select
 # Starship Prompt
 # ─────────────────────────────────────────────────────────────────────────────
 export STARSHIP_CONFIG=~/.config/starship/starship.toml
-eval "$(starship init zsh)"
+command -v starship &>/dev/null && eval "$(starship init zsh)"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Plugins (from Homebrew)
+# ZSH Plugins
 # ─────────────────────────────────────────────────────────────────────────────
-source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [[ "$_OS" == "macos" ]]; then
+    source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+elif [[ "$_OS" == "linux" ]]; then
+    [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && \
+        source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    [[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && \
+        source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Aliases: SSH
@@ -60,22 +75,26 @@ alias tf='terraform'
 alias tg='terragrunt'
 alias tga='terragrunt apply'
 alias tgd='terragrunt destroy'
-complete -o nospace -C /opt/homebrew/bin/terraform terraform
+if command -v terraform &>/dev/null; then
+    complete -o nospace -C "$(command -v terraform)" terraform
+fi
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Kubernetes & OpenShift
 # ─────────────────────────────────────────────────────────────────────────────
 alias k=kubectl
-source <(command kubectl completion zsh)
+if command -v kubectl &>/dev/null; then
+    source <(command kubectl completion zsh)
+    compdef k=kubectl
+fi
 [[ -f ~/.oc-completion.zsh ]] && source ~/.oc-completion.zsh
-compdef k=kubectl
-compdef oc=kubectl
+command -v oc &>/dev/null && compdef oc=kubectl
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Modern CLI Tools
 # ─────────────────────────────────────────────────────────────────────────────
 # zoxide (smart cd)
-eval "$(zoxide init zsh)"
+command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
 # neovim as default editor
 alias vim='nvim'
@@ -102,7 +121,9 @@ alias dotfiles='cd ~/.dotfiles'
 # PATH Configuration
 # ─────────────────────────────────────────────────────────────────────────────
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
+if [[ "$_OS" == "macos" ]]; then
+    export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
+fi
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Local Configuration (secrets, machine-specific settings)
@@ -110,5 +131,9 @@ export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 # ─────────────────────────────────────────────────────────────────────────────
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
-# OpenClaw Completion
-source "/Users/eitanpod/.openclaw/completions/openclaw.zsh"
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

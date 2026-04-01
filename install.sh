@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # ┌───────────────────────────────────────────────────────────────────────────┐
 # │                         Dotfiles Installation Script                       │
+# │                        Supports: macOS & Fedora Linux                      │
 # └───────────────────────────────────────────────────────────────────────────┘
 
 set -e
@@ -14,6 +15,15 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
+
+# ─────────────────────────────────────────────────────────────────────────────
+# OS Detection
+# ─────────────────────────────────────────────────────────────────────────────
+case "$(uname -s)" in
+    Darwin) _OS="macos" ;;
+    Linux)  _OS="linux" ;;
+    *)      echo "Unsupported OS: $(uname -s)"; exit 1 ;;
+esac
 
 print_header() {
     echo -e "\n${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -41,38 +51,81 @@ fi
 
 cd "$DOTFILES_DIR"
 
-print_header "Eitan's Dotfiles Installer"
+print_header "Eitan's Dotfiles Installer ($_OS)"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Check for Homebrew
-# ─────────────────────────────────────────────────────────────────────────────
-
-print_header "Checking Prerequisites"
-
-if ! command -v brew &> /dev/null; then
-    print_warning "Homebrew not found. Installing..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    
-    # Add Homebrew to PATH for Apple Silicon
-    if [[ -f "/opt/homebrew/bin/brew" ]]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-    fi
-else
-    print_success "Homebrew is installed"
-fi
-
-# ─────────────────────────────────────────────────────────────────────────────
-# Install dependencies from Brewfile
+# Install Dependencies
 # ─────────────────────────────────────────────────────────────────────────────
 
 print_header "Installing Dependencies"
 
-if [[ -f "$DOTFILES_DIR/Brewfile" ]]; then
-    print_warning "Installing packages from Brewfile..."
-    brew bundle --file="$DOTFILES_DIR/Brewfile"
-    print_success "Dependencies installed"
-else
-    print_warning "No Brewfile found, skipping..."
+if [[ "$_OS" == "macos" ]]; then
+    # ── macOS: Homebrew ──────────────────────────────────────────────────
+    if ! command -v brew &> /dev/null; then
+        print_warning "Homebrew not found. Installing..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+        # Add Homebrew to PATH for Apple Silicon
+        if [[ -f "/opt/homebrew/bin/brew" ]]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        fi
+    else
+        print_success "Homebrew is installed"
+    fi
+
+    if [[ -f "$DOTFILES_DIR/Brewfile" ]]; then
+        print_warning "Installing packages from Brewfile..."
+        brew bundle --file="$DOTFILES_DIR/Brewfile"
+        print_success "Brew dependencies installed"
+    fi
+
+elif [[ "$_OS" == "linux" ]]; then
+    # ── Fedora: DNF ──────────────────────────────────────────────────────
+    if ! command -v dnf &> /dev/null; then
+        print_error "dnf not found. This script supports Fedora Linux."
+        exit 1
+    fi
+
+    print_warning "Installing packages via dnf..."
+
+    # Core tools
+    sudo dnf install -y \
+        stow git neovim tmux zsh \
+        zsh-autosuggestions zsh-syntax-highlighting \
+        fastfetch htop jq tree
+
+    # Modern CLI replacements
+    sudo dnf install -y \
+        eza bat ripgrep fd-find zoxide fzf git-delta
+
+    # Development
+    sudo dnf install -y \
+        python3 nodejs golang
+
+    # yq (not in default Fedora repos)
+    if ! command -v yq &> /dev/null; then
+        print_warning "Installing yq from GitHub..."
+        YQ_VERSION=$(curl -s https://api.github.com/repos/mikefarah/yq/releases/latest | grep tag_name | cut -d '"' -f 4)
+        sudo curl -L "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" -o /usr/local/bin/yq
+        sudo chmod +x /usr/local/bin/yq
+    fi
+
+    # Starship prompt
+    if ! command -v starship &> /dev/null; then
+        print_warning "Installing Starship prompt..."
+        curl -sS https://starship.rs/install.sh | sh -s -- -y
+    fi
+
+    # Infrastructure tools (optional - warn if missing)
+    for tool in kubectl helm terraform terragrunt aws az; do
+        if ! command -v "$tool" &> /dev/null; then
+            print_warning "$tool not found — install manually if needed"
+        else
+            print_success "$tool is installed"
+        fi
+    done
+
+    print_success "DNF dependencies installed"
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -99,6 +152,9 @@ backup_if_exists "$HOME/.config/starship"
 backup_if_exists "$HOME/.config/nvim"
 backup_if_exists "$HOME/.config/ghostty"
 backup_if_exists "$HOME/.config/fastfetch"
+backup_if_exists "$HOME/.claude/settings.json"
+backup_if_exists "$HOME/.claude/rules"
+backup_if_exists "$HOME/.claude/skills"
 
 if [[ -d "$BACKUP_DIR" ]]; then
     print_success "Backups saved to: $BACKUP_DIR"
@@ -112,11 +168,12 @@ fi
 
 print_header "Creating Symlinks with GNU Stow"
 
-# Ensure .config directory exists
+# Ensure target directories exist
 mkdir -p "$HOME/.config"
+mkdir -p "$HOME/.claude"
 
 # Stow each package
-PACKAGES=(zsh git vim tmux starship nvim ghostty fastfetch)
+PACKAGES=(zsh git vim tmux starship nvim ghostty fastfetch claude)
 
 for package in "${PACKAGES[@]}"; do
     if [[ -d "$DOTFILES_DIR/$package" ]]; then
@@ -169,6 +226,16 @@ else
 fi
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Set default shell to zsh (Linux only)
+# ─────────────────────────────────────────────────────────────────────────────
+
+if [[ "$_OS" == "linux" && "$SHELL" != */zsh ]]; then
+    print_warning "Setting default shell to zsh..."
+    chsh -s "$(command -v zsh)"
+    print_success "Default shell set to zsh (takes effect on next login)"
+fi
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Final message
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -180,6 +247,11 @@ echo -e "  ${YELLOW}1.${NC} Restart your terminal or run: ${GREEN}source ~/.zshr
 echo -e "  ${YELLOW}2.${NC} Edit ${GREEN}~/.zshrc.local${NC} to add your API keys"
 echo -e "  ${YELLOW}3.${NC} Open tmux and press ${GREEN}prefix + I${NC} to install plugins"
 echo -e "  ${YELLOW}4.${NC} Open nvim and let LazyVim install plugins\n"
+
+if [[ "$_OS" == "linux" ]]; then
+    echo -e "  ${YELLOW}Note:${NC} Install infrastructure tools manually if needed:"
+    echo -e "    kubectl, helm, terraform, terragrunt, awscli, azure-cli\n"
+fi
 
 echo -e "Useful commands:"
 echo -e "  ${GREEN}dotfiles${NC}  - cd to dotfiles directory"

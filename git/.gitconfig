@@ -1,6 +1,6 @@
 [user]
-	name = eitanpod
-	email = eitan@octopuscs.com
+	name = EITANPOD
+	email = eitanp2001@gmail.com
 
 [init]
 	defaultBranch = main
@@ -41,3 +41,5 @@
 
 [url "https://gitlab.octopuscs.com/"]
 	insteadOf = git@gitlab.octopuscs.com:
+[credential]
+	helper = store
