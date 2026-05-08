@@ -137,3 +137,5 @@ fi
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+alias claude-mem='bun "/Users/eitanpod/.claude/plugins/cache/thedotmack/claude-mem/12.3.7/scripts/worker-service.cjs"'
