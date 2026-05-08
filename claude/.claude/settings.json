@@ -67,11 +67,29 @@
   },
   "statusLine": {
     "type": "command",
-    "command": "node \"$HOME/.claude/hooks/gsd-statusline.js\""
+    "command": "bash ~/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
     "everything-claude-code@everything-claude-code": true,
-    "telegram@claude-plugins-official": true
+    "telegram@claude-plugins-official": false,
+    "frontend-design@claude-plugins-official": true,
+    "claude-mem@thedotmack": true,
+    "caveman@caveman": true
   },
-  "effortLevel": "high"
+  "extraKnownMarketplaces": {
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      }
+    },
+    "caveman": {
+      "source": {
+        "source": "github",
+        "repo": "JuliusBrussee/caveman"
+      }
+    }
+  },
+  "effortLevel": "xhigh",
+  "skipAutoPermissionPrompt": true
 }
