@@ -31,6 +31,14 @@ nvim/.config/nvim/lazyvim.json
 # Tmux plugins (managed by TPM)
 tmux/.config/tmux/plugins/
 
+# Claude skills (managed via plugin marketplaces, whitelist personal ones)
+claude/.claude/skills/*
+!claude/.claude/skills/notebooklm/
+!claude/.claude/skills/pr/
+!claude/.claude/skills/refactor/
+!claude/.claude/skills/review/
+!claude/.claude/skills/test/
+
 # Temp files
 *.tmp
 *.temp
