@@ -12,5 +12,8 @@ font-size = 16
 # Behavior
 mouse-hide-while-typing = true
 
+# Left Option = Alt (word-jump via Option+arrows). Right Option keeps special chars (é, ∑…).
+macos-option-as-alt = left
+
 # Visual effects
 background-blur-radius = 20

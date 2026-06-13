@@ -101,6 +101,28 @@ alias vim='nvim'
 export EDITOR='nvim'
 export VISUAL='nvim'
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Key Bindings
+# Force emacs prompt keymap. zsh otherwise auto-picks vi mode because EDITOR=nvim
+# matches *vi* — that only affects the PROMPT line editor, not file editing.
+# emacs mode gives native Ctrl+R history search, Ctrl+A/E/W, and no vi-normal lockup.
+# ─────────────────────────────────────────────────────────────────────────────
+bindkey -e
+bindkey "^[[1;3D" backward-word   # Option/Alt + Left  → jump word left
+bindkey "^[[1;3C" forward-word    # Option/Alt + Right → jump word right
+bindkey "^[b"     backward-word   # Alt + B
+bindkey "^[f"     forward-word    # Alt + F
+
+# Prefix history search: type part of a command, press Up/Down to cycle only
+# matching past commands (oh-my-zsh default; lost when switching to starship).
+autoload -U up-line-or-beginning-search down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "^[[A" up-line-or-beginning-search    # Up arrow
+bindkey "^[OA" up-line-or-beginning-search    # Up arrow (application mode / tmux)
+bindkey "^[[B" down-line-or-beginning-search  # Down arrow
+bindkey "^[OB" down-line-or-beginning-search  # Down arrow (application mode / tmux)
+
 # eza (modern ls)
 alias ls='eza --icons'
 alias ll='eza -lh --icons'
@@ -116,6 +138,7 @@ alias cat='bat --paging=never'
 alias pub='echo "$(<~/.ssh/id_ed25519.pub)"'
 alias reload='source ~/.zshrc'
 alias dotfiles='cd ~/.dotfiles'
+alias up='caffeinate -di'
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PATH Configuration
@@ -139,3 +162,6 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 alias claude-mem='bun "/Users/eitanpod/.claude/plugins/cache/thedotmack/claude-mem/12.3.7/scripts/worker-service.cjs"'
+
+# GitHub MCP token — pulled from macOS Keychain (no plaintext on disk)
+export GITHUB_MCP_TOKEN="$(security find-generic-password -a "$USER" -s github-mcp-token -w 2>/dev/null)"
