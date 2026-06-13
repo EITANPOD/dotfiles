@@ -1,5 +1,5 @@
 {
-  "model": "opus[1m]",
+  "model": "opus",
   "hooks": {
     "Notification": [
       {
@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "case $(uname) in Darwin) osascript -e 'display notification \"Permission approval needed\" with title \"Claude Code - Action Required\"';; Linux) notify-send 'Claude Code - Action Required' 'Permission approval needed';; esac"
+            "command": "osascript -e 'display notification \"Permission approval needed\" with title \"Claude Code - Action Required\"'"
           }
         ]
       },
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "case $(uname) in Darwin) osascript -e 'display notification \"Claude is done and waiting\" with title \"Claude Code\"';; Linux) notify-send 'Claude Code' 'Claude is done and waiting';; esac"
+            "command": "osascript -e 'display notification \"Claude is done and waiting\" with title \"Claude Code\"'"
           }
         ]
       },
@@ -25,7 +25,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "case $(uname) in Darwin) osascript -e 'display notification \"Claude is asking you a question\" with title \"Claude Code\"';; Linux) notify-send 'Claude Code' 'Claude is asking you a question';; esac"
+            "command": "osascript -e 'display notification \"Claude is asking you a question\" with title \"Claude Code\"'"
           }
         ]
       }
@@ -35,7 +35,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/gsd-check-update.js\""
+            "command": "node \"/Users/eitanpod/.claude/hooks/gsd-check-update.js\""
           }
         ]
       }
@@ -46,7 +46,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/gsd-context-monitor.js\"",
+            "command": "node \"/Users/eitanpod/.claude/hooks/gsd-context-monitor.js\"",
             "timeout": 10
           }
         ]
@@ -58,8 +58,17 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"$HOME/.claude/hooks/gsd-prompt-guard.js\"",
+            "command": "node \"/Users/eitanpod/.claude/hooks/gsd-prompt-guard.js\"",
             "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
           }
         ]
       }
@@ -71,10 +80,9 @@
   },
   "enabledPlugins": {
     "everything-claude-code@everything-claude-code": true,
-    "telegram@claude-plugins-official": false,
-    "frontend-design@claude-plugins-official": true,
-    "claude-mem@thedotmack": true,
-    "caveman@caveman": true
+    "claude-mem@thedotmack": false,
+    "caveman@caveman": true,
+    "superpowers@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "thedotmack": {
