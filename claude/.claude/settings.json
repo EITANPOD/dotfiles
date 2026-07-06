@@ -1,5 +1,5 @@
 {
-  "model": "opus",
+  "model": "sonnet",
   "hooks": {
     "Notification": [
       {
@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "osascript -e 'display notification \"Permission approval needed\" with title \"Claude Code - Action Required\"'"
+            "command": "command -v osascript &>/dev/null && osascript -e 'display notification \"Permission approval needed\" with title \"Claude Code - Action Required\"' || command -v notify-send &>/dev/null && notify-send 'Claude Code - Action Required' 'Permission approval needed'"
           }
         ]
       },
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "osascript -e 'display notification \"Claude is done and waiting\" with title \"Claude Code\"'"
+            "command": "command -v osascript &>/dev/null && osascript -e 'display notification \"Claude is done and waiting\" with title \"Claude Code\"' || command -v notify-send &>/dev/null && notify-send 'Claude Code' 'Claude is done and waiting'"
           }
         ]
       },
@@ -25,7 +25,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "osascript -e 'display notification \"Claude is asking you a question\" with title \"Claude Code\"'"
+            "command": "command -v osascript &>/dev/null && osascript -e 'display notification \"Claude is asking you a question\" with title \"Claude Code\"' || command -v notify-send &>/dev/null && notify-send 'Claude Code' 'Claude is asking you a question'"
           }
         ]
       }
@@ -48,24 +48,39 @@
   },
   "enabledPlugins": {
     "everything-claude-code@everything-claude-code": true,
-    "claude-mem@thedotmack": false,
     "caveman@caveman": true,
-    "superpowers@claude-plugins-official": true
+    "superpowers@claude-plugins-official": true,
+    "ultracost@ultracost": true,
+    "claude-prompt@claude-prompt": true,
+    "ponytail@ponytail": true
   },
   "extraKnownMarketplaces": {
-    "thedotmack": {
-      "source": {
-        "source": "github",
-        "repo": "thedotmack/claude-mem"
-      }
-    },
     "caveman": {
       "source": {
         "source": "github",
         "repo": "JuliusBrussee/caveman"
       }
+    },
+    "ultracost": {
+      "source": {
+        "source": "github",
+        "repo": "danielkremen818/ultracost"
+      }
+    },
+    "claude-prompt": {
+      "source": {
+        "source": "github",
+        "repo": "danielkremen818/claude-prompt"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
     }
   },
-  "effortLevel": "xhigh",
+  "effortLevel": "high",
+  "theme": "dark",
   "skipAutoPermissionPrompt": true
 }

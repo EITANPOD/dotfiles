@@ -138,7 +138,7 @@ alias cat='bat --paging=never'
 alias pub='echo "$(<~/.ssh/id_ed25519.pub)"'
 alias reload='source ~/.zshrc'
 alias dotfiles='cd ~/.dotfiles'
-alias up='caffeinate -di'
+[[ "$_OS" == "macos" ]] && alias up='caffeinate -di'
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PATH Configuration
@@ -161,7 +161,11 @@ fi
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-alias claude-mem='bun "/Users/eitanpod/.claude/plugins/cache/thedotmack/claude-mem/12.3.7/scripts/worker-service.cjs"'
+alias claude-mem='bun "$HOME/.claude/plugins/cache/thedotmack/claude-mem/12.3.7/scripts/worker-service.cjs"'
 
-# GitHub MCP token — pulled from macOS Keychain (no plaintext on disk)
-export GITHUB_MCP_TOKEN="$(security find-generic-password -a "$USER" -s github-mcp-token -w 2>/dev/null)"
+if [[ "$_OS" == "macos" ]]; then
+    # GitHub MCP token — pulled from macOS Keychain (no plaintext on disk)
+    export GITHUB_MCP_TOKEN="$(security find-generic-password -a "$USER" -s github-mcp-token -w 2>/dev/null)"
+    # Cursor GUI apps don't read .zshrc — push token into launchd so MCP headers resolve
+    [[ -n "$GITHUB_MCP_TOKEN" ]] && launchctl setenv GITHUB_MCP_TOKEN "$GITHUB_MCP_TOKEN"
+fi

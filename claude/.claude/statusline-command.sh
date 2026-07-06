@@ -105,16 +105,21 @@ fi
 
 # ---------------------------------------------------------------------------
 # LINE 3 — cost: $X.XXX/$CAP (pct%)
+# Uses the real billed cost Claude Code reports (.cost.total_cost_usd): it is
+# model-aware (tracks whichever model actually runs), cache-discount aware, and
+# includes subagent spend. No hardcoded per-model prices to drift out of date.
 # ---------------------------------------------------------------------------
 
-# Pricing: claude-sonnet-4-6 $3/M input, $15/M output
-COST_CAP=10
-total_out=$(echo "$input" | jq -r '.context_window.total_output_tokens // 0')
-total_in_cost=${total_in:-0}
-cost=$(awk "BEGIN {printf \"%.3f\", ($total_in_cost/1000000)*3 + ($total_out/1000000)*15}")
-cost_pct=$(awk "BEGIN {v=int(($cost/$COST_CAP)*100); if(v>100) v=100; print v}")
-col=$(pct_color "$cost_pct")
-line3=$(printf "cost     %b\$%s/\$%s (%d%%)%b" "$col" "$cost" "$COST_CAP" "$cost_pct" "$RESET")
+COST_CAP=150
+real_cost=$(echo "$input" | jq -r '.cost.total_cost_usd // empty')
+if [ -n "$real_cost" ]; then
+  cost=$(awk "BEGIN {printf \"%.3f\", $real_cost}")
+  cost_pct=$(awk "BEGIN {v=int(($real_cost/$COST_CAP)*100); if(v>100) v=100; print v}")
+  col=$(pct_color "$cost_pct")
+  line3=$(printf "cost     %b\$%s/\$%s (%d%%)%b" "$col" "$cost" "$COST_CAP" "$cost_pct" "$RESET")
+else
+  line3=$(printf "cost     %b\$--/\$%s (--%%)%b" "$YELLOW" "$COST_CAP" "$RESET")
+fi
 
 # ---------------------------------------------------------------------------
 # Output — three lines separated by literal newlines
