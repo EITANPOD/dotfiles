@@ -19,11 +19,6 @@ Before ANY commit:
 - Validate that required secrets are present at startup
 - Rotate any secrets that may have been exposed
 
-## Security Response Protocol
+## If a Security Issue Is Found
 
-If security issue found:
-1. STOP immediately
-2. Use **security-reviewer** agent
-3. Fix CRITICAL issues before continuing
-4. Rotate any exposed secrets
-5. Review entire codebase for similar issues
+Stop immediately. Fix CRITICAL issues before continuing, rotate any exposed secrets, and sweep the codebase for similar issues.
