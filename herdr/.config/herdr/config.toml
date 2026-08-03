@@ -1,0 +1,41 @@
+# herdr configuration — mirrors ~/.config/tmux/tmux.conf keybindings + theme.
+# Only actions that differ from herdr's defaults are listed here; anything
+# omitted (new_tab=c, next_tab=n, previous_tab=p, focus_pane_*=hjkl, etc.)
+# already matches tmux's stock defaults, which your config never touched.
+
+[theme]
+name = "catppuccin"   # matches tmux.conf's @catppuccin_flavor mocha
+
+[keys]
+prefix = "ctrl+a"              # your tmux.conf: set -g prefix C-a
+detach = "prefix+d"            # tmux default (unchanged in your conf)
+rename_tab = "prefix+comma"    # tmux default rename-window ","
+close_tab = "prefix+ampersand" # tmux default kill-window "&"
+workspace_picker = "prefix+s"  # tmux default choose-session "s" (closest to herdr's workspace = tmux session)
+split_horizontal = "prefix+minus" # flipped from tmux.conf's bind | split-window -h
+split_vertical = "prefix+|"       # flipped from tmux.conf's bind - split-window -v
+zoom = "prefix+m"               # your tmux.conf: bind -r m resize-pane -Z
+reload_config = "prefix+r"      # your tmux.conf: bind r source-file ...
+resize_mode = "prefix+shift+r"  # freed up "r" above; enters a repeatable resize mode
+                                 # (herdr has no one-shot prefix+hjkl resize like your
+                                 # tmux.conf's bind j/k/l/h resize-pane -D/-U/-R/-L 5 —
+                                 # closest equivalent is this modal resize)
+copy_mode = "prefix+["           # tmux default copy-mode entry (unchanged in your conf)
+next_agent = "cmd+1"           # skip to next agent
+
+# n/p now switch WORKSPACES (your primary unit, not tabs) — see workspace-vs-tab note above
+next_workspace = ["prefix+n", "cmd+§"] # cmd+§ direct, see tmux.conf's "bind -n § next-window"
+                                       # bare § alone is rejected by herdr (unprefixed printable
+                                       # key would swallow normal typing); cmd+§ is the closest safe direct binding
+previous_workspace = "prefix+p"
+
+# tabs moved off n/p onto w/q (both freed earlier: workspace_picker->s, detach->d)
+next_tab = "prefix+w"
+previous_tab = "prefix+q"
+
+# Not carried over — no herdr equivalent exists:
+#  - bind M-c attach-session -c   (no "new workspace from pane cwd" action)
+#  - copy-mode-vi 'v'/'y' select/copy-pipe to pbcopy (herdr's copy_mode has its
+#    own built-in navigation, not individually rebindable)
+#  - vim-tmux-navigator ctrl+hjkl direct pane nav (not installed/applicable here;
+#    herdr's prefix+hjkl already does pane focus like tmux's plain hjkl would)
