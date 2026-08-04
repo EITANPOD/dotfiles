@@ -21,7 +21,7 @@ resize_mode = "prefix+shift+r"  # freed up "r" above; enters a repeatable resize
                                  # tmux.conf's bind j/k/l/h resize-pane -D/-U/-R/-L 5 —
                                  # closest equivalent is this modal resize)
 copy_mode = "prefix+["           # tmux default copy-mode entry (unchanged in your conf)
-next_agent = "cmd+1"           # skip to next agent
+next_agent = "cmd+backtick"    # skip to next agent
 
 # n/p now switch WORKSPACES (your primary unit, not tabs) — see workspace-vs-tab note above
 next_workspace = ["prefix+n", "cmd+§"] # cmd+§ direct, see tmux.conf's "bind -n § next-window"

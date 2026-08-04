@@ -17,8 +17,3 @@ macos-option-as-alt = left
 
 # Visual effects
 background-blur-radius = 20
-
-# Keybinds
-# cmd+1 freed for herdr's next_agent binding; tab-1 moved to cmd+shift+1.
-keybind = cmd+digit_1=unbind
-keybind = cmd+shift+digit_1=goto_tab:1
