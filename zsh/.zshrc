@@ -10,9 +10,6 @@ case "$(uname -s)" in
     Linux)  _OS="linux" ;;
 esac
 
-# Fastfetch on terminal start
-command -v fastfetch &>/dev/null && fastfetch
-
 # ─────────────────────────────────────────────────────────────────────────────
 # History Configuration
 # ─────────────────────────────────────────────────────────────────────────────
